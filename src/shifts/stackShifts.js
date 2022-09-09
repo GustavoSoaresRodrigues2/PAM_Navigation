@@ -13,7 +13,13 @@ export default function StackShifts() {
     return (
 
         <Stack.Navigator>
-            <Stack.Screen name = 'home' component = {Home} />
+            <Stack.Screen name = 'home' component = {Home} 
+                
+                // tirando a navbar 
+                options = {{
+                    headerShown: false
+                }}
+            />
             <Stack.Screen name = 'details' component = {Details} />
         </Stack.Navigator>
 
