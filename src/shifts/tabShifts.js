@@ -2,13 +2,14 @@
 import { StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // Imports pages
-import About from '../pages/about';
-import Contact from '../pages/contact';
+import Registration from '../pages/registration';
 import StackShifts from './stackShifts';
+import About from '../pages/about';
 // Icons
-import { Entypo } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
+import Home from '../pages/home';
+
 
 // Cria a Tab
 const Tab = createBottomTabNavigator();
@@ -26,20 +27,20 @@ export default function App() {
       } 
     }}>
 
-        <Tab.Screen name='StackShifts' component={StackShifts}
-        options={{
-          tabBarIcon: ({color, size}) => {
-            // Retorna como Icons
-            return <Entypo name="home" size={size} color={color} />
-            }
-        }}
-        ></Tab.Screen>
-
-        <Tab.Screen name='CONTACT' component={Contact} 
+        <Tab.Screen name='HOME' component={Home}
         options={{
           tabBarIcon: ({color, size}) => {
             // Retorna como Icons
             return <AntDesign name="contacts" size={size} color={color} />
+            }
+        }}
+        ></Tab.Screen>
+
+        <Tab.Screen name='REGISTRATION' component={Registration} 
+        options={{
+          tabBarIcon: ({color, size}) => {
+            // Retorna como Icons
+            return <AntDesign name="team" size={size} color={color} />
             }
         }}
         ></Tab.Screen>
