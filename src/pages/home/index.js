@@ -1,23 +1,30 @@
 // Imports Geral
-import { View,Text, Button, StyleSheet } from "react-native";
+import { View,Text, Button, StyleSheet, FlatList } from "react-native";
 import Registration from "../registration";
 import React, { useEffect, useState } from "react";
 import firebase from "../firebaseConnection"
 
 export default function Home() {
 
-    const [nome,setNome] = useState("");
-    const [nota1,setNota1] = useState("");
-    const [nota2,setNota2] = useState("");
-    const [nota3,setNota3] = useState("");
+    const [alunos,setAlunos] = useState([]);
 
+    
     useEffect(()=>{
         async function buscarAluno(){
-            await firebase.database().ref("aluno/1").on("value", (snapshot) => {
-                setNome(snapshot.val().nome);
-                setNota1(snapshot.val().nota1);
-                setNota2(snapshot.val().nota2);
-                setNota3(snapshot.val().nota3);
+            await firebase.database().ref("aluno").on("value", (snapshot) => {
+                setAlunos([]);
+                snapshot.forEach( (childItem) => {
+                    let data = {
+                        key: childItem.key,
+                        nome: childItem.val().nome,
+                        nota1: childItem.val().nota1,
+                        nota2: childItem.val().nota2,
+                        nota3: childItem.val().nota3,
+                        imagem: childItem.val().imagem
+                    }
+
+                    setAlunos(alunos => [...alunos, data]);
+                })
             })
         }
 
@@ -25,21 +32,23 @@ export default function Home() {
     })
 
     return (
-        <View>
-            <Text style={styles.home}>Screen home !</Text>
-            <Text style={styles.home}>Nome: {nome}</Text>
-            <Text style={styles.home}>Nota 1: {nota1}</Text>
-            <Text style={styles.home}>Nota 2: {nota2}</Text>
-            <Text style={styles.home}>Nota 3: {nota3}</Text>
+        <View style={styles.container}>
+            <Text>Lista de Alunos</Text>
+            <FlatList
+                data = {alunos}
+                numColumns = {2}
+                keyExtractor = {(item) => item.key}
+                renderItem = {(({item}) => <Text> {item.nome}: {item.nota1} / {item.nota2} / {item.nota3} |</Text>)}
+            />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    home: {
-        textAlign: "center",
+    container: {
+        justifyContent: "center",
         paddingTop: "20px",
         textTransform: "capitalize",
-        textDecorationLine: "underline"
+        alignItems: "center"
     }
 })
