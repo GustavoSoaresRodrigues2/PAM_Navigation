@@ -3,6 +3,7 @@ import { View,Text, Button, StyleSheet, FlatList } from "react-native";
 import Registration from "../registration";
 import React, { useEffect, useState } from "react";
 import firebase from "../firebaseConnection"
+import CardAlunos from "../../components/cardsAluno";
 
 export default function Home() {
 
@@ -12,8 +13,12 @@ export default function Home() {
     useEffect(()=>{
         async function buscarAluno(){
             await firebase.database().ref("aluno").on("value", (snapshot) => {
+                
+                
                 setAlunos([]);
                 snapshot.forEach( (childItem) => {
+                    
+                    
                     let data = {
                         key: childItem.key,
                         nome: childItem.val().nome,
@@ -22,14 +27,15 @@ export default function Home() {
                         nota3: childItem.val().nota3,
                         imagem: childItem.val().imagem
                     }
-
+                    
                     setAlunos(alunos => [...alunos, data]);
                 })
+
             })
         }
 
         buscarAluno();
-    })
+    },[])
 
     return (
         <View style={styles.container}>
@@ -38,7 +44,7 @@ export default function Home() {
                 data = {alunos}
                 numColumns = {2}
                 keyExtractor = {(item) => item.key}
-                renderItem = {(({item}) => <Text> {item.nome}: {item.nota1} / {item.nota2} / {item.nota3} |</Text>)}
+                renderItem = {(({item}) => <CardAlunos data={item}></CardAlunos>)}
             />
         </View>
     );
